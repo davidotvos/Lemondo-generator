@@ -8,6 +8,8 @@ import sys
 # Must be installed: pip install python-docx
 from docx import Document
 
+from docx2pdf import convert
+
 template_path = 'test_lemondo.docx'
 replacements = ['_tervcim', '_tipus', '_iktatoszam']
 
@@ -33,3 +35,8 @@ def create_docxs(path, replacements_dict:dict):
     new_file_path = template_path.replace(".docx", "_new.docx")
     # save the new docx file
     doc.save(new_file_path)
+
+
+# Docx fájlból Pdf formátumot készít és elmenti a megadott fájlba
+def convert_to_pdf(input_path, output_path):
+    convert(input_path, output_path)
