@@ -160,15 +160,11 @@ class Ui_MainWindow(object):
         self.lemondoTable.setMaximumSize(QtCore.QSize(5000, 5000))
         self.lemondoTable.setStyleSheet("font: 18pt \"Arial\";")
         self.lemondoTable.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-
-        # Táblanézet formázása
-        self.lemondoTable.setHorizontalHeaderLabels(['Iktatószám', 'Tervcím', 'Engedélytípus'])
-        self.lemondoTable.setColumnCount(3)
-
         self.lemondoTable.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.lemondoTable.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.lemondoTable.setObjectName("lemondoTable")
         self.lemondoTable.setRowCount(0)
+        self.lemondoTable.setColumnCount(3)
         self.lemondoTable.horizontalHeader().setCascadingSectionResizes(True)
         self.lemondoTable.verticalHeader().setCascadingSectionResizes(True)
         self.tableViewLayout.addWidget(self.lemondoTable)
@@ -209,6 +205,9 @@ class Ui_MainWindow(object):
 
         self.deleteButton.clicked.connect(self.delete_row)
 
+        self.lemondoTable.setHorizontalHeaderLabels(['Iktatószám', 'Tervcím', 'Engedélytípus'])
+        self.lemondoTable.resizeColumnsToContents()
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -230,19 +229,28 @@ class Ui_MainWindow(object):
 
 
     def add_row(self):
-            
-            count = self.lemondoTable.rowCount()
-            self.lemondoTable.insertRow(count)
-            self.lemondoTable.setItem(count, 0, QtWidgets.QTableWidgetItem(self.iktatoszamInput.text()))
-            self.lemondoTable.setItem(count, 1, QtWidgets.QTableWidgetItem(self.tervcimTextInput.toPlainText()))
-            self.lemondoTable.setItem(count, 2, QtWidgets.QTableWidgetItem(self.tipusBox.currentText()))
-            
-            # inputok frissítése
-            self.iktatoszamInput.setText('')
-            self.tervcimTextInput.setText('')
 
-            # cellák méretre igazítása
-            self.lemondoTable.resizeColumnsToContents()
+        if self.iktatoszamInput.text().isspace() or self.iktatoszamInput.text() == '':
+            return
+        
+        if self.tervcimTextInput.toPlainText().isspace() or self.tervcimTextInput.toPlainText() == '':
+            return
+
+
+        count = self.lemondoTable.rowCount()
+        self.lemondoTable.insertRow(count)
+        self.lemondoTable.setItem(count, 0, QtWidgets.QTableWidgetItem(self.iktatoszamInput.text()))
+        self.lemondoTable.setItem(count, 1, QtWidgets.QTableWidgetItem(self.tervcimTextInput.toPlainText()))
+        self.lemondoTable.setItem(count, 2, QtWidgets.QTableWidgetItem(self.tipusBox.currentText()))
+        
+        # inputok frissítése
+        self.iktatoszamInput.setText('')
+        self.tervcimTextInput.setText('')
+
+        # cellák méretre igazítása
+        self.lemondoTable.resizeColumnsToContents()
+        
+            
 
     def pick_folder(self):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(self,"Select folder")
@@ -251,3 +259,5 @@ class Ui_MainWindow(object):
 
     def delete_row(self):
         print(utils.save_folder)
+
+    
