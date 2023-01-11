@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication
 import sys
 import ui
 
+
 class LemondoApp(QtWidgets.QMainWindow, ui.Ui_MainWindow):
     def __init__(self, parent=None):
         super(LemondoApp, self).__init__(parent)
