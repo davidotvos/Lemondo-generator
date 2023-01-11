@@ -12,6 +12,7 @@ from docx2pdf import convert
 
 template_path = 'test_lemondo.docx'
 replacements = ['_tervcim', '_tipus', '_iktatoszam']
+save_folder = ''
 
 
 def create_docxs(path, replacements_dict:dict):

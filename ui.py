@@ -10,10 +10,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import utils
+
 
 class Ui_MainWindow(object):
-
-    folder_path = ""
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -124,7 +124,7 @@ class Ui_MainWindow(object):
         self.lemondoTable.setColumnCount(0)
         self.lemondoTable.setRowCount(0)
 
-
+        # Táblanézet formázása
         self.lemondoTable.setHorizontalHeaderLabels(['Iktatószám', 'Tervcím', 'Engedélytípus'])
         self.lemondoTable.setColumnCount(3)
         self.lemondoTable.setColumnWidth(0,218)
@@ -191,13 +191,15 @@ class Ui_MainWindow(object):
         self.gridLayout.addLayout(self.letrehozLayout, 3, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
         self.addButton.clicked.connect(self.add_row)
         self.folderButton.clicked.connect(self.pick_folder)
+
+        self.deleteButton.clicked.connect(self.delete_row)
+        
 
 
 
@@ -234,6 +236,8 @@ class Ui_MainWindow(object):
 
     def pick_folder(self):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(self,"Select folder")
-        print(folder_path)
-        # C:/Users/Dav/Desktop/Projects/lemondo
-        return folder_path
+        utils.save_folder = folder_path
+
+
+    def delete_row(self):
+        print(utils.save_folder)
