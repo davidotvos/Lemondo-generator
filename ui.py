@@ -265,16 +265,20 @@ class Ui_MainWindow(object):
 
     
     def create_pdfs(self):
+        if(self.lemondoTable.rowCount() == 0):
+            return
+        
         tempLemondoObj = lemondok.Lemondo
-        tempLemondoLi = []
+
         for row in range(self.lemondoTable.rowCount()):
             tempRow = []
             for col in range(self.lemondoTable.columnCount()):
                 tempRow.append(self.lemondoTable.item(row,col).text())
             
             tempLemondoObj = lemondok.Lemondo(iktatoszam=tempRow[0], tervcim=tempRow[1], tipus=tempRow[2])
-            tempLemondoLi.append(tempLemondoObj)
+            utils.lemondoLi.append(tempLemondoObj)
         
-        utils.lemondoLi = tempLemondoLi
+        
+
 
         #TODO itt hívni meg a create pdfs methódust
