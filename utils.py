@@ -9,10 +9,15 @@ import sys
 from docx import Document
 
 from docx2pdf import convert
+import lemondok
 
 template_path = 'test_lemondo.docx'
 replacements = ['_tervcim', '_tipus', '_iktatoszam']
 save_folder = ''
+
+# Lemondók listája
+lemondoLi = []
+
 
 
 def create_docxs(path, replacements_dict:dict):
@@ -29,7 +34,7 @@ def create_docxs(path, replacements_dict:dict):
                     replaced_text = re.sub(replaceArg, replacements_dict.get(replaceArg), run.text, 999)
                     if replaced_text != run.text:
                         # if the replaced text is not the same as the original
-                        # replace the text and increment the number of occurences
+                        # replace the text
                         run.text = replaced_text
 
     # make a new file name by adding "_new" to the original file name

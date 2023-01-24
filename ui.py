@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import utils
+import lemondok
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -208,6 +209,8 @@ class Ui_MainWindow(object):
         self.lemondoTable.setHorizontalHeaderLabels(['Iktatószám', 'Tervcím', 'Engedélytípus'])
         self.lemondoTable.resizeColumnsToContents()
 
+        self.createButton.clicked.connect(self.create_pdfs)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -241,7 +244,7 @@ class Ui_MainWindow(object):
         self.lemondoTable.insertRow(count)
         self.lemondoTable.setItem(count, 0, QtWidgets.QTableWidgetItem(self.iktatoszamInput.text()))
         self.lemondoTable.setItem(count, 1, QtWidgets.QTableWidgetItem(self.tervcimTextInput.toPlainText()))
-        self.lemondoTable.setItem(count, 2, QtWidgets.QTableWidgetItem(self.tipusBox.currentText()))
+        self.lemondoTable.setItem(count, 2, QtWidgets.QTableWidgetItem(self.tipusBox.currentText() + ' engedély'))
         
         # inputok frissítése
         self.iktatoszamInput.setText('')
@@ -261,3 +264,17 @@ class Ui_MainWindow(object):
         print(utils.save_folder)
 
     
+    def create_pdfs(self):
+        tempLemondoObj = lemondok.Lemondo
+        tempLemondoLi = []
+        for row in range(self.lemondoTable.rowCount()):
+            tempRow = []
+            for col in range(self.lemondoTable.columnCount()):
+                tempRow.append(self.lemondoTable.item(row,col).text())
+            
+            tempLemondoObj = lemondok.Lemondo(iktatoszam=tempRow[0], tervcim=tempRow[1], tipus=tempRow[2])
+            tempLemondoLi.append(tempLemondoObj)
+        
+        utils.lemondoLi = tempLemondoLi
+
+        #TODO itt hívni meg a create pdfs methódust

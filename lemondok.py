@@ -19,13 +19,9 @@ honapok = {
 varos = "Debrecen"
 
 
-def getdatum(honap_szam):
-    """
-
-    """
-
+def getdatum():
     d = str(datetime.date.today()).split('-')
-    d[1] = honapok.get(honap_szam)(d[1])
+    d[1] = honapok.get(d[1])(d[1])
     result = '. '.join(d[:2]) + ' ' + d[2] + '.'
 
     return result
@@ -33,4 +29,10 @@ def getdatum(honap_szam):
 
 class Lemondo:
     def __init__(self, tervcim, iktatoszam, tipus, dátum):
-        pass
+        self.tervcim = tervcim
+        self.iktatoszam = iktatoszam
+        self.tipus = tipus
+        self.dátum = getdatum()
+
+    def __str__(self):
+        return f'tervcím: {self.tervcim}, iktatószám: {self.iktatoszam}, típus: {self.tipus}'
