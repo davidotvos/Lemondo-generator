@@ -16,7 +16,7 @@ honapok = {
     '12' : 'december'
 }
 
-varos = "Debrecen"
+varos = 'Debrecen'
 
 
 def getdatum():
