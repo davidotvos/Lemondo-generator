@@ -279,6 +279,6 @@ class Ui_MainWindow(object):
             utils.lemondoLi.append(tempLemondoObj)
         
         
-
+        utils.create_docxs(utils.template_path, utils.testDict)
 
         #TODO itt hívni meg a create pdfs methódust

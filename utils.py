@@ -18,6 +18,15 @@ save_folder = ''
 # Lemondók listája
 lemondoLi = []
 
+testDict = {
+    '_tervcim' : 'ABC',
+    '_tipus' : '',
+    '_iktatoszam' : '',
+    '_varos' : 'Debrecen',
+    '_datum' : '',
+    '_felelos' : 'Alföldi Imre',
+    '_pozicio' : 'Debrecen Run Team Lead'
+}
 
 
 def create_docxs(path, replacements_dict:dict):

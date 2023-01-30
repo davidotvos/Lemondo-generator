@@ -17,6 +17,7 @@ honapok = {
 }
 
 varos = 'Debrecen'
+_felelos = 'Alföldi Imre'
 
 
 def getdatum():
@@ -28,11 +29,12 @@ def getdatum():
 
 
 class Lemondo:
-    def __init__(self, tervcim, iktatoszam, tipus, dátum):
+    def __init__(self, tervcim, iktatoszam, tipus, dátum, felelos):
         self.tervcim = tervcim
         self.iktatoszam = iktatoszam
         self.tipus = tipus
         self.dátum = getdatum()
+        self.felelos = _felelos
 
     def __str__(self):
         return f'tervcím: {self.tervcim}, iktatószám: {self.iktatoszam}, típus: {self.tipus}'
