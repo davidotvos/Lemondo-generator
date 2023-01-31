@@ -11,7 +11,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import utils
-import lemondok
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -231,6 +230,13 @@ class Ui_MainWindow(object):
         self.deleteButton.setText(_translate("MainWindow", "Törlés"))
 
 
+    """
+    Ez a függvény hozzáad egy sort a lemondó táblához. Először ellenőrzi, 
+    hogy az "iktatószám" és a "terv cím" mezők nem üresek-e, ha az egyik üres, 
+    akkor a függvény visszatér. Ha mindkét mező kitöltött, akkor létrehoz egy 
+    új sort a táblában, és beállítja az adatokat az "iktatószám", "terv cím" 
+    és a "típus engedély" oszlopokban. Végül frissíti az input mezőket és igazítja a cellák méretét a tartalmukhoz.
+    """
     def add_row(self):
 
         if self.iktatoszamInput.text().isspace() or self.iktatoszamInput.text() == '':
@@ -244,7 +250,7 @@ class Ui_MainWindow(object):
         self.lemondoTable.insertRow(count)
         self.lemondoTable.setItem(count, 0, QtWidgets.QTableWidgetItem(self.iktatoszamInput.text()))
         self.lemondoTable.setItem(count, 1, QtWidgets.QTableWidgetItem(self.tervcimTextInput.toPlainText()))
-        self.lemondoTable.setItem(count, 2, QtWidgets.QTableWidgetItem(self.tipusBox.currentText() + ' engedély'))
+        self.lemondoTable.setItem(count, 2, QtWidgets.QTableWidgetItem(self.tipusBox.currentText().lower()))
         
         # inputok frissítése
         self.iktatoszamInput.setText('')
@@ -253,8 +259,12 @@ class Ui_MainWindow(object):
         # cellák méretre igazítása
         self.lemondoTable.resizeColumnsToContents()
         
-            
 
+    """
+    A "pick_folder" függvény egy mappát választ a felhasználótól egy "Select folder" 
+    nevű dialógus segítségével, és a kiválasztott mappa elérési útját a "utils.save_folder" 
+    változóba menti.
+    """        
     def pick_folder(self):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(self,"Select folder")
         utils.save_folder = folder_path
@@ -268,18 +278,17 @@ class Ui_MainWindow(object):
         if(self.lemondoTable.rowCount() == 0):
             return
         
-        tempLemondoObj = lemondok.Lemondo
+        tempLemondoObj = utils.Lemondo
 
         for row in range(self.lemondoTable.rowCount()):
             tempRow = []
             for col in range(self.lemondoTable.columnCount()):
                 tempRow.append(self.lemondoTable.item(row,col).text())
             
-            tempLemondoObj = lemondok.Lemondo(iktatoszam=tempRow[0], tervcim=tempRow[1], tipus=tempRow[2])
+            tempLemondoObj = utils.Lemondo(iktatoszam=tempRow[0], tervcim=tempRow[1], tipus=tempRow[2], datum="2023.01.02")
             utils.lemondoLi.append(tempLemondoObj)
         
         
-        utils.create_docxs(utils.template_path, utils.testDict)
-        
+        utils.create_pdfs()
 
-        #TODO itt hívni meg a create pdfs methódust
+    

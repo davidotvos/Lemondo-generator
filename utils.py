@@ -1,23 +1,24 @@
-# Import re for regex functions
-import re
 
 # Import sys for getting the command line arguments
 import sys
+import os
 
 # Import docx to work with .docx files.
 # Must be installed: pip install python-docx
 from docx import Document
 
 from docx2pdf import convert
-import lemondok
 import datetime
+import comtypes.client
+import webbrowser
+
+
 
 template_path = 'test_lemondo.docx'
-replacements = ['_tervcim', '_tipus', '_iktatoszam']
 save_folder = ''
 
 # Lemondók listája
-lemondoLi = []
+lemondoLi= []
 
 testDict = {
     '_tervcim' : 'ABC',
@@ -48,29 +49,63 @@ honapok = {
 }
 
 class Lemondo:
-    def __init__(self, tervcim, iktatoszam, tipus,):
+    def __init__(self, tervcim, iktatoszam, tipus, datum):
         self.tervcim = tervcim
         self.iktatoszam = iktatoszam
         self.tipus = tipus
-        self.dátum = getdatum()
+        self.dátum = datum
         self.felelos = _felelos
 
     def __str__(self):
         return f'tervcím: {self.tervcim}, iktatószám: {self.iktatoszam}, típus: {self.tipus}'
 
+def create_pdfs():
+
+    if len(lemondoLi) == 0:
+        return
+
+    doc = Document('test.docx')
+
+
+    
+    for l in lemondoLi:
+        temp_dic = lemondo_to_dict(l)
+        for key,value in temp_dic.items():
+            docx_find_replace_text(doc, key, value)
+        
+        doc.save(f"Lemondás - {save_folder}/{temp_dic['_tervcim']}.docx")
+
+    print(save_folder)
+    webbrowser.open(save_folder)
+
+
+
+"""
+Ez a metódus a jelenlegi dátumot a "év. hónap. nap." formátumban adja vissza, 
+ahol a hónapot a magyar név (a honapok szótárban megadva) jelzi. A datetime 
+modult és egy szótárt (honapok) használja ehhez.
+"""
 def getdatum():
     d = str(datetime.date.today()).split('-')
-    d[1] = honapok.get(d[1])(d[1])
-    result = '. '.join(d[:2]) + ' ' + d[2] + '.'
+    temp = honapok.get(d[1])
+    d[1] = temp
+    datum = f"{d[0]}. {d[1]} {d[2]}."
+    return datum
 
-    return result
 
-
-# Docx fájlból Pdf formátumot készít és elmenti a megadott fájlba
+"""
+Ez a metódus egy adott állományt (input_path) PDF formátumba konvertál és elmenti 
+egy megadott helyre (output_path). Az átalakítást a convert metódus végzi.
+"""
 def convert_to_pdf(input_path, output_path):
     convert(input_path, output_path)
 
 
+"""
+Ez a metódus a doc objektumban a search_text stringet a replace_text-re cseréli. 
+Az átalakítás minden cellában és bekezdésben végbe megy, így biztosítva, hogy mindenhol 
+megjelenő szöveg átalakításra kerüljön. Az átalakítás során a szöveg formázása is megmarad.
+"""
 def docx_find_replace_text(doc, search_text, replace_text):
     paragraphs = list(doc.paragraphs)
     for t in doc.tables:
@@ -153,4 +188,19 @@ def docx_find_replace_text(doc, search_text, replace_text):
                     else:
                         text = inline[index].text.replace(inline[index].text[start:start + length], '')
                         inline[index].text = text
-            # print(p.text)
+
+
+def lemondo_to_dict(lemondo:Lemondo):
+    
+    d = {
+        '_tervcim' : lemondo.tervcim,
+        '_tipus' : lemondo.tipus,
+        '_iktatoszam' : lemondo.iktatoszam,
+        '_varos' : 'Debrecen',
+        '_datum' : getdatum(),
+        '_felelos' : 'Alföldi Imre',
+        '_pozicio' : 'Debrecen Run Team Lead'
+    }
+
+    return d
+
