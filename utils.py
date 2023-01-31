@@ -77,6 +77,7 @@ def create_pdfs():
 
     print(save_folder)
     webbrowser.open(save_folder)
+    
 
 
 
