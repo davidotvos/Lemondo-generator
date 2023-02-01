@@ -73,7 +73,7 @@ def create_pdfs():
         for key,value in temp_dic.items():
             docx_find_replace_text(doc, key, value)
         
-        doc.save(f"Lemondás - {save_folder}/{temp_dic['_tervcim']}.docx")
+        doc.save(f"{save_folder}/Lemondás - {temp_dic['_tervcim'].replace('/','-')}.docx")
 
     print(save_folder)
     webbrowser.open(save_folder)
